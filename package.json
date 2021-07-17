@@ -1,0 +1,11 @@
+{
+  "name": "uuid-api-anzen",
+  "version": "0.0.1",
+  "description": "none",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Stefan Leung",
+  "license": "MIT"
+}
