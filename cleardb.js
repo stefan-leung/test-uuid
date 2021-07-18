@@ -2,7 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoPWD = process.env.mongo;
 const uri = `mongodb+srv://anzen-uuid-mongo:${mongoPWD}@counting0.tex6f.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
-const toDelete = ''
+const toDelete = 'counting'
 
 MongoClient.connect(uri, function (err, db) {
     if (err) throw err;
