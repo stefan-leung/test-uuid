@@ -9,6 +9,13 @@ require('dotenv').config();
 const mongoPWD = process.env.mongo;
 const uri = `mongodb+srv://anzen-uuid-mongo:${mongoPWD}@counting0.tex6f.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
+async funtion dbQuery() {
+    const db = await MongoClient.connect(url);
+    const dbo = db.db("mydb");
+    return await dbo.collection("tblData").find({}).toArray();
+};
+
+
 var database, returnable;
 var insertItems = { uuid: 0 };
 var deleteItems = [
@@ -61,15 +68,8 @@ function alldata(request, response) {
             }
     
             console.log(JSON.stringify(result));
-            db.close()
-        });
-    });
+        })
 
-    MongoClient.connect(uri, function (err, db) {
-        if (err) throw err;
-        console.log("Database connected twice!");
-        const dbo = db.db('counter');
-    
         if(insertItems) {
             dbo.collection("counting").insertOne(insertItems, function (err, res) {
                 if (err) throw err;
