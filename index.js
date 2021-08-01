@@ -12,7 +12,7 @@ const uri = `mongodb+srv://anzen-uuid-mongo:${mongoPWD}@counting0.tex6f.mongodb.
 async funtion dbQuery() {
     const db = await MongoClient.connect(url);
     const dbo = db.db("mydb");
-    return await dbo.collection("tblData").find({}).toArray();
+    return await dbo.collection("counting").find({}).toArray();
 };
 
 
@@ -41,7 +41,7 @@ app.listen(4000, () => console.log("Server Started at port " + 4000));
 app.use(express.static('public'));
 app.use(cors());
 
-// when get request is made, alldata() is called
+// when get request is made, alldata() is calledcc
 app.get('/uuid', alldata);
 
 function alldata(request, response) {
@@ -50,7 +50,7 @@ function alldata(request, response) {
         console.log("Database connected once!");
         const dbo = db.db('counter');
     
-        dbo.collection("counting").find({}).toArray(function (err, result) {
+        /*dbo.collection("counting").find({}).toArray(function (err, result) {
             if (err) throw err;
     
             console.log(result.length + ' a')
@@ -68,7 +68,9 @@ function alldata(request, response) {
             }
     
             console.log(JSON.stringify(result));
-        })
+        });*/
+
+        insertItems = dbQuery().length;
 
         if(insertItems) {
             dbo.collection("counting").insertOne(insertItems, function (err, res) {
