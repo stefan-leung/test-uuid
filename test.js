@@ -11,30 +11,72 @@ app.use(cors());
 
 // when get request is made, alldata() is called
 app.get('/uuid', uuid);
-app.get('/uuid/reset/:element/', resetuuid)
-
+app.get('/uuid/add', incrementuuid);
+app.get('/uuid/all', alluuid);
+app.get('/uuid/reset', resetuuid);
 
 function uuid(request, response) {
-    var data = JSON.parse(fs.readFileSync('main.json'));
-    data.push({'num': data.length, 'time': 0});
-    fs.writeFileSync('main.json', JSON.stringify(data));
+    var keys = JSON.parse(fs.readFileSync('keys.json'));
 
-    var elements = JSON.parse(fs.readFileSync('main.json'));
-    response.send(elements[elements.length - 1]);
-}
+    if(keys.indexOf(request.query.key) >= 0) {
+        var elements = JSON.parse(fs.readFileSync('main.json'));
+        response.send({'key': true, 'data': elements[elements.length - 1]});
 
-const keys = ['hi', 'hey']
+    } else {
+        console.warn('Tried to access one with wrong key / without key'); // Fix when internet
+        response.send({'key': false, 'data': false}); 
+
+    };
+};
+
+function incrementuuid(request, response) {
+    var keys = JSON.parse(fs.readFileSync('keys.json'));
+
+    if(keys.indexOf(request.query.key) >= 0) {
+        var data = JSON.parse(fs.readFileSync('main.json'));
+
+        data.push({'num': data.length, 'time': 0});
+        fs.writeFileSync('main.json', JSON.stringify(data));
+
+        var elements = JSON.parse(fs.readFileSync('main.json'));
+        response.send({'key': true, 'data': elements[elements.length - 1]});
+
+    } else {
+        console.warn('Tried to increment with wrong key / without key'); // Fix when internet
+        response.send({'key': false, 'data': false}); 
+
+    };
+};
+
+function alluuid(request, response) {
+    var keys = JSON.parse(fs.readFileSync('keys.json'));
+
+    if(keys.indexOf(request.query.key) >= 0) {
+        var elements = JSON.parse(fs.readFileSync('main.json'));
+        response.send({'key': true, 'data': elements});
+
+    } else {
+        console.warn('Tried to view all with wrong key / without key'); // Fix when internet
+        response.send({'key': false, 'data': false}); 
+
+    };
+};
 
 function resetuuid(request, response) {
-    if(keys.indexOf(request.params.element) >= 0) { try {
+    var keys = JSON.parse(fs.readFileSync('keys.json'));
+
+    if(keys.indexOf(request.query.key) >= 0) { try {
         fs.writeFileSync('main.json', '[]');
         response.send({'key': true, 'reset': true, 'data': JSON.parse(fs.readFileSync('main.json'))});
+
     } catch (error) {
-        console.error(error) // Fix when internet
+        console.error(error); // Fix when internet
         response.send({'key': true, 'reset': false, 'data': JSON.parse(fs.readFileSync('main.json'))});
+
     }} else {
-        console.warn('Tried to reset with wrong or no key'); // Fix when internet
+        console.warn('Tried to reset with wrong key / without key'); // Fix when internet
         response.send({'key': false, 'reset': false, 'data': false}); 
+
     };
 
 };
