@@ -1,7 +1,6 @@
 var converter = new showdown.Converter();
 let mdjson = [];
 
-
 $.ajax({
     async: false,
     type: 'GET',
